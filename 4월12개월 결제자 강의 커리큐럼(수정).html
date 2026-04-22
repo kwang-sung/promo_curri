@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쿠대 8주 하이브리드 전략 라이브 가이드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --org: #E85D1A;
+    --org2: #FF7A38;
+    --org-pale: #FFF3EC;
+    --gold: #C98F1A;
+    --gold2: #F5BE4A;
+    --gold-pale: #FFFBEF;
+    --teal: #0F7A6E;
+    --teal2: #15A898;
+    --navy: #1C2645;
+    --bg: #F7F8FC;
+    --white: #FFFFFF;
+    --text: #1C2645;
+    --muted: #6B7597;
+    --line: #E4E7F2;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:14px; line-height:1.75; }
+
+  /* ────────── HERO ────────── */
+  .hero {
+    background: linear-gradient(145deg, #1C2645 0%, #2A3660 55%, #1C3A55 100%);
+    padding: 60px 32px 52px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content:'';
+    position:absolute; bottom:0; left:0; right:0; height:4px;
+    background: linear-gradient(90deg, var(--org), var(--gold2), var(--teal2));
+  }
+  /* subtle light orb */
+  .hero::before {
+    content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%);
+    width:700px; height:400px; border-radius:50%;
+    background: radial-gradient(ellipse, rgba(255,122,56,.08) 0%, transparent 65%);
+    pointer-events:none;
+  }
+
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(255,122,56,.15); border:1px solid rgba(255,122,56,.35);
+    color:#FFAA7A; font-size:11px; font-weight:700; letter-spacing:2px;
+    padding:6px 16px; border-radius:20px; margin-bottom:22px;
+    text-transform:uppercase;
+  }
+  .hero h1 {
+    font-family:'Noto Serif KR',serif;
+    font-size:34px; font-weight:900; color:#fff;
+    line-height:1.45; margin-bottom:14px;
+  }
+  .hero h1 .acc { color:#FFAA7A; }
+  .hero h1 .acc2 { color:var(--gold2); }
+  .hero-desc {
+    color:rgba(255,255,255,.6); font-size:14px;
+    max-width:460px; margin:0 auto 32px;
+    line-height:1.8;
+  }
+  .hero-desc strong { color:rgba(255,255,255,.9); }
+
+  /* stat pills */
+  .stat-row { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:32px; }
+  .stat-pill {
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);
+    border-radius:50px; padding:10px 22px; text-align:center;
+    backdrop-filter:blur(4px);
+  }
+  .stat-pill .v { font-size:20px; font-weight:900; color:#fff; display:block; line-height:1.2; }
+  .stat-pill .l { font-size:11px; color:rgba(255,255,255,.5); letter-spacing:.5px; }
+
+  /* promise box */
+  .promise {
+    max-width:520px; margin:0 auto;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:14px; padding:18px 24px;
+    font-size:13.5px; color:rgba(255,255,255,.75);
+    line-height:1.8;
+  }
+  .promise strong { color:#FFAA7A; }
+
+  /* ────────── SCHED BAR ────────── */
+  .sched-bar {
+    background:var(--org);
+    padding:12px 32px;
+    display:flex; justify-content:center; gap:28px; flex-wrap:wrap;
+  }
+  .sched-item { display:flex; align-items:center; gap:6px; color:#fff; font-size:12.5px; font-weight:500; }
+  .sched-item strong { font-weight:800; }
+
+  /* ────────── CONTAINER ────────── */
+  .wrap { max-width:900px; margin:0 auto; padding:40px 20px 70px; }
+
+  /* ────────── PHASE BLOCK ────────── */
+  .phase {
+    margin-bottom:28px;
+    border-radius:16px; overflow:hidden;
+    box-shadow:0 3px 20px rgba(0,0,0,.07);
+    border:1px solid var(--line);
+    background:var(--white);
+  }
+
+  .phase-head {
+    display:flex; align-items:center; gap:14px;
+    padding:17px 24px;
+    border-bottom:1px solid var(--line);
+  }
+  .ph1-head { background:linear-gradient(90deg,#FFF3EC,#fff); }
+  .ph2-head { background:linear-gradient(90deg,#FFFBEF,#fff); }
+  .ph3-head { background:linear-gradient(90deg,#EDF9F7,#fff); }
+  .ph4-head { background:linear-gradient(90deg,#EEF0FA,#fff); }
+
+  .ph-icon {
+    width:44px; height:44px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Noto Serif KR',serif; font-size:18px; font-weight:900;
+    color:#fff; flex-shrink:0;
+  }
+  .ic1{background:linear-gradient(135deg,#E85D1A,#FF8C52);}
+  .ic2{background:linear-gradient(135deg,#C98F1A,#F5BE4A);}
+  .ic3{background:linear-gradient(135deg,#0F7A6E,#15A898);}
+  .ic4{background:linear-gradient(135deg,#1C2645,#3A4D80);}
+
+  .ph-meta { flex:1; }
+  .ph-sub { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:2px; }
+  .ph-title { font-family:'Noto Serif KR',serif; font-size:16.5px; font-weight:900; color:var(--navy); }
+
+  .ph-wk {
+    font-size:11px; font-weight:700; color:#fff;
+    padding:5px 13px; border-radius:20px; white-space:nowrap;
+  }
+  .wk1{background:var(--org);} .wk2{background:var(--gold);}
+  .wk3{background:var(--teal);} .wk4{background:var(--navy);}
+
+  /* week grid */
+  .wk-grid { display:grid; grid-template-columns:1fr 1fr; }
+
+  .wk-card {
+    padding:22px 24px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .wk-card:nth-child(odd) { border-right:1px solid var(--line); }
+  .wk-card:nth-last-child(-n+2) { border-bottom:none; }
+
+  .wk-date { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+
+  .wk-title {
+    font-family:'Noto Serif KR',serif;
+    font-size:15.5px; font-weight:900; color:var(--navy);
+    line-height:1.5; margin-bottom:14px;
+  }
+  .wk-title .hl { color:var(--org); }
+  .wk-title .gl { color:var(--gold); }
+  .wk-title .tl { color:var(--teal); }
+
+  /* topic list */
+  .tlist { list-style:none; }
+  .tlist li {
+    font-size:12.5px; color:#4A5275;
+    padding:4px 0 4px 15px; position:relative;
+    border-bottom:1px dashed var(--line);
+  }
+  .tlist li:last-child { border-bottom:none; }
+  .tlist li::before { content:'▸'; position:absolute; left:0; top:5px; font-size:9px; color:var(--org); }
+
+  /* tag badges */
+  .tag {
+    display:inline-block; font-size:9.5px; font-weight:700;
+    padding:1.5px 7px; border-radius:4px; margin-left:5px;
+    vertical-align:middle; letter-spacing:.5px;
+  }
+  .t-hot { background:#FFF0E8; color:var(--org); border:1px solid #FFCCAA; }
+  .t-key { background:#FFFBEF; color:var(--gold); border:1px solid #FFE088; }
+  .t-new { background:#E8F9F7; color:var(--teal); border:1px solid #A0DDD8; }
+  .t-lock { background:#ECEEF8; color:var(--navy); border:1px solid #C0C8E8; }
+
+  /* footer teaser */
+  .wk-teaser {
+    margin-top:13px;
+    background:var(--org-pale);
+    border-left:3px solid var(--org);
+    padding:9px 12px; border-radius:0 6px 6px 0;
+    font-size:12px; color:#6B3520; font-style:italic;
+  }
+
+  /* phase goal bar */
+  .ph-goal {
+    background:var(--navy);
+    padding:12px 24px;
+    display:flex; align-items:center; gap:10px;
+    font-size:12.5px; color:rgba(255,255,255,.6);
+  }
+  .ph-goal strong { color:var(--gold2); }
+  .ph-goal span { font-size:18px; flex-shrink:0; }
+
+  /* ────────── DIVIDER ────────── */
+  .div { height:1px; background:linear-gradient(90deg,transparent,var(--line),transparent); margin:32px 0; }
+
+  /* ────────── BOTTOM CTA ────────── */
+  .cta {
+    background:linear-gradient(145deg, #1C2645, #2A3660);
+    border-radius:18px; padding:44px 32px;
+    text-align:center; position:relative; overflow:hidden;
+  }
+  .cta::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle,rgba(232,93,26,.12) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .cta h2 {
+    font-family:'Noto Serif KR',serif;
+    font-size:24px; font-weight:900; color:#fff;
+    line-height:1.5; margin-bottom:12px;
+  }
+  .cta h2 em { color:#FFAA7A; font-style:normal; }
+  .cta p { color:rgba(255,255,255,.6); font-size:13.5px; margin-bottom:28px; line-height:1.9; }
+  .cta p strong { color:rgba(255,255,255,.9); }
+
+  .cta-chips { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+  .cta-chip {
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.8); font-size:12px; font-weight:500;
+    padding:8px 18px; border-radius:50px;
+  }
+
+  .cta-box {
+    display:inline-block;
+    background:linear-gradient(135deg,rgba(232,93,26,.2),rgba(201,143,26,.15));
+    border:1px solid rgba(232,93,26,.35);
+    border-radius:10px; padding:14px 24px;
+    color:rgba(255,255,255,.75); font-size:13px; line-height:1.7;
+  }
+  .cta-box strong { color:#FFAA7A; }
+
+  /* ────────── FOOTER ────────── */
+  .footer {
+    background:var(--navy); text-align:center;
+    padding:20px; font-size:11px; color:rgba(255,255,255,.25); letter-spacing:1px;
+  }
+  .footer em { color:var(--org2); font-style:normal; }
+
+  @media(max-width:600px){
+    .wk-grid{grid-template-columns:1fr;}
+    .wk-card:nth-child(odd){border-right:none;}
+    .wk-card:nth-last-child(-n+2){border-bottom:1px solid var(--line);}
+    .wk-card:last-child{border-bottom:none;}
+    .hero h1{font-size:25px;}
+    .stat-row{gap:8px;}
+    .cta{padding:32px 20px;}
+    .cta h2{font-size:20px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div class="hero-badge">🔒 12개월 결제자 전용 · 비공개 라이브 특전</div>
+  <h1>국내 리셀과 해외 소싱,<br><span class="acc">두 개를 하나로 합치면</span><br><span class="acc2">매출이 달라집니다</span></h1>
+  <p class="hero-desc">
+    아무도 공개하지 않는 <strong>하이브리드 전략</strong> —<br>
+    마스터가 직접 쓰는 소싱 루트부터 매출 구조 설계까지<br>
+    8주 동안 그대로 공개합니다.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-pill"><span class="v">8주</span><span class="l">집중 라이브</span></div>
+    <div class="stat-pill"><span class="v">토 9시</span><span class="l">매주 120분</span></div>
+    <div class="stat-pill"><span class="v">5/9</span><span class="l">개강</span></div>
+    <div class="stat-pill"><span class="v">1부+2부</span><span class="l">이론+실습</span></div>
+  </div>
+
+  <div class="promise">
+    🔥 이 커리큘럼은 <strong>4월 12개월 장기 결제자 전원</strong>에게 약속된 특전입니다.<br>
+    제목만 봐도 "이건 안 들으면 손해다" 싶을 겁니다.
+  </div>
+</div>
+
+<!-- ─── SCHED BAR ─── -->
+<div class="sched-bar">
+  <div class="sched-item">📅 <strong>5월 9일 개강</strong></div>
+  <div class="sched-item">🗓 <strong>매주 토요일 09:00~11:00</strong></div>
+  <div class="sched-item">1부 <strong>전략 강의 60분</strong></div>
+  <div class="sched-item">2부 <strong>실습 & Q&A 60분</strong></div>
+  <div class="sched-item">📹 <strong>녹화본 제공</strong></div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<div class="wrap">
+
+  <!-- ══ PHASE 1 ══ -->
+  <div class="phase">
+    <div class="phase-head ph1-head">
+      <div class="ph-icon ic1">1</div>
+      <div class="ph-meta">
+        <div class="ph-sub">Phase 1 · 리셀 엔진 가동</div>
+        <div class="ph-title">리셀 엔진 가동 및 첫 주문</div>
+      </div>
+      <div class="ph-wk wk1">1~2주차</div>
+    </div>
+
+    <div class="wk-grid">
+
+      <div class="wk-card">
+        <div class="wk-date">Week 1 · 5월 9일 (토)</div>
+        <div class="wk-title">
+          지금 올리면 팔리는 상품 vs<br>
+          <span class="hl">올려도 절대 안 팔리는 상품</span> —<br>
+          그 차이를 아는 사람만 첫 주문이 납니다
+        </div>
+        <ul class="tlist">
+          <li>2026 지금 이 시장, 뭐가 바뀌고 있나 — 셀러라면 반드시 알아야 할 것<span class="tag t-hot">핵심</span></li>
+          <li>국내 리셀만 하고 있다면 — 놓치고 있는 절반의 이야기</li>
+          <li>내 성향이 수익 구조를 결정한다 — 마스터의 셀러 유형 진단<span class="tag t-key">진단</span></li>
+          <li>쿠대 — 첫날부터 매출 구조가 돌아가게 하는 세팅법<span class="tag t-hot">실습</span></li>
+        </ul>
+        <div class="wk-teaser">💬 "왜 열심히 올리는데 안 팔리나" — 이 질문의 답, 1주차에 드립니다.</div>
+      </div>
+
+      <div class="wk-card">
+        <div class="wk-date">Week 2 · 5월 16일 (토)</div>
+        <div class="wk-title">
+          고객이 검색하기 전에<br>
+          <span class="hl">내가 먼저 꽂혀 있는 법</span> —<br>
+          첫 주문을 만드는 소싱 공식
+        </div>
+        <ul class="tlist">
+          <li>데이터랩 · 아이템스카우트 — 대부분이 모르는 한 가지 활용법<span class="tag t-key">독점</span></li>
+          <li>지금 팔리는 것보다 중요한 것 — 마스터가 먼저 보는 신호</li>
+          <li>첫 주문까지 가장 빠른 길 — 마스터의 Full Process 공개<span class="tag t-hot">실전</span></li>
+          <li>지금 당장 올리면 안 되는 카테고리가 있다 — 그 이유</li>
+        </ul>
+        <div class="wk-teaser">💬 소싱처 고민, 이번 주 이후엔 안 하게 됩니다.</div>
+      </div>
+
+    </div>
+    <div class="ph-goal"><span>🎯</span><div><strong>Phase 1 목표:</strong> 리셀 엔진 ON — 첫 주문 발생 & 나만의 주력 카테고리 확정</div></div>
+  </div>
+
+  <!-- ══ PHASE 2 ══ -->
+  <div class="phase">
+    <div class="phase-head ph2-head">
+      <div class="ph-icon ic2">2</div>
+      <div class="ph-meta">
+        <div class="ph-sub">Phase 2 · 해외 소싱 실전</div>
+        <div class="ph-title">고마진 하이브리드 구축</div>
+      </div>
+      <div class="ph-wk wk2">3~4주차</div>
+    </div>
+
+    <div class="wk-grid">
+
+      <div class="wk-card">
+        <div class="wk-date">Week 3 · 5월 23일 (토)</div>
+        <div class="wk-title">
+          국내 리셀만 하면<br>
+          <span class="gl">마진 한계가 온다</span> —<br>
+          해외 소싱으로 30% 마진 만드는 법
+        </div>
+        <ul class="tlist">
+          <li>해외 소싱, 어디서 해야 하나 — 마스터가 실제로 쓰는 루트<span class="tag t-new">최초공개</span></li>
+          <li>브랜드와 중국, 섞어서 해야 하는 이유 — 둘 중 하나만 하면 한계가 온다</li>
+          <li>배송비가 마진을 잡아먹고 있다면 — 아는 사람만 쓰는 방법이 있습니다</li>
+          <li>마진이 나오는 카테고리에는 공통점이 있다 — 그 공통점 공개<span class="tag t-hot">독점</span></li>
+        </ul>
+        <div class="wk-teaser">💬 해외 소싱 어렵다고 피하던 분들이 가장 많이 돈 법니다.</div>
+      </div>
+
+      <div class="wk-card">
+        <div class="wk-date">Week 4 · 5월 30일 (토)</div>
+        <div class="wk-title">
+          중국 소싱,<br>
+          <span class="gl">아는 사람만 쓰는</span><br>
+          진짜 방법 — 알리는 시작일 뿐
+        </div>
+        <ul class="tlist">
+          <li>알리·타오·1688 — 같은 중국인데 왜 결과가 다른가<span class="tag t-hot">실전</span></li>
+          <li>중국 상품이 안 팔리는 건 상품 문제가 아닙니다 — 진짜 이유</li>
+          <li>상품명 하나 바꿨더니 매출이 달라졌다 — AI 활용법 공개<span class="tag t-key">핵심</span></li>
+          <li>해외 베스트셀러를 국내에서 먼저 파는 방법 — 마스터 루트<span class="tag t-new">실습</span></li>
+        </ul>
+        <div class="wk-teaser">💬 중국 소싱을 포기했던 분들, 이번 주 이후 생각이 바뀝니다.</div>
+      </div>
+
+    </div>
+    <div class="ph-goal"><span>🎯</span><div><strong>Phase 2 목표:</strong> 국내 리셀 + 해외 소싱 병행 체계 완성 — 마진 30% 구조 설계 완료</div></div>
+  </div>
+
+  <!-- ══ PHASE 3 ══ -->
+  <div class="phase">
+    <div class="phase-head ph3-head">
+      <div class="ph-icon ic3">3</div>
+      <div class="ph-meta">
+        <div class="ph-sub">Phase 3 · 반대량 등록 & 노출 폭발</div>
+        <div class="ph-title">반대량 등록 퀀텀 점프</div>
+      </div>
+      <div class="ph-wk wk3">5~6주차</div>
+    </div>
+
+    <div class="wk-grid">
+
+      <div class="wk-card">
+        <div class="wk-date">Week 5 · 6월 6일 (토)</div>
+        <div class="wk-title">
+          올리는 속도를<br>
+          <span class="tl">10배 높이는 방법</span> —<br>
+          대량 등록, 제대로 하면 다릅니다
+        </div>
+        <ul class="tlist">
+          <li>지금 내 단계에서 뭘 써야 하나 — 등록 방식 선택의 기준<span class="tag t-hot">진단</span></li>
+          <li>많이 올리면 무조건 팔리나 — 대부분이 모르는 함정이 있습니다</li>
+          <li>마켓마다 비중이 달라야 하는 이유 — 마스터의 실전 배분 공개<span class="tag t-key">핵심</span></li>
+          <li>올리다 계정 날린 사람들의 공통점 — 이것만 지키면 됩니다</li>
+        </ul>
+        <div class="wk-teaser">💬 등록 개수가 문제가 아닙니다 — 방식이 문제입니다.</div>
+      </div>
+
+      <div class="wk-card">
+        <div class="wk-date">Week 6 · 6월 13일 (토)</div>
+        <div class="wk-title">
+          고객이 3초 안에 사게 만드는<br>
+          <span class="tl">썸네일 & 상세페이지</span> —<br>
+          AI로 10분 만에 완성하는 법
+        </div>
+        <ul class="tlist">
+          <li>고객은 3초 안에 결정한다 — 그 3초를 잡는 법<span class="tag t-hot">실습</span></li>
+          <li>외주 안 줘도 되는 이유 — AI 하나로 다 해결되는 시대입니다</li>
+          <li>마스터가 직접 쓰는 AI 프롬프트 — 처음으로 공개<span class="tag t-key">독점</span></li>
+          <li>이미지 때문에 계정 날린다 — 안전하게 쓰는 원칙<span class="tag t-new">실전</span></li>
+        </ul>
+        <div class="wk-teaser">💬 이 주차 이후 상세 외주 맡기는 분이 없어집니다.</div>
+      </div>
+
+    </div>
+    <div class="ph-goal"><span>🎯</span><div><strong>Phase 3 목표:</strong> 등록 상품 수 폭발 + 클릭률·전환율 동시 개선 — 매출 가시화 시작</div></div>
+  </div>
+
+  <!-- ══ PHASE 4 ══ -->
+  <div class="phase">
+    <div class="phase-head ph4-head">
+      <div class="ph-icon ic4">4</div>
+      <div class="ph-meta">
+        <div class="ph-sub">Phase 4 · 3천 매출 안착 전략</div>
+        <div class="ph-title">3~4개월 내에 3천 매출 안착을 위한 전략</div>
+      </div>
+      <div class="ph-wk wk4">7~8주차</div>
+    </div>
+
+    <div class="wk-grid">
+
+      <div class="wk-card">
+        <div class="wk-date">Week 7 · 6월 20일 (토)</div>
+        <div class="wk-title">
+          열심히 하는데 왜 나만<br>
+          <span class="hl">매출이 안 느나</span> —<br>
+          그 이유, 이번 주에 알게 됩니다
+        </div>
+        <ul class="tlist">
+          <li>잘 팔리다 갑자기 멈춘 상품 — 대부분이 모르는 진짜 이유<span class="tag t-hot">핵심</span></li>
+          <li>하나 팔리면 열 개 더 팔 수 있다 — 마스터만 아는 확장 공식</li>
+          <li>아직도 재고를 안 들이고 있다면 — 놓치고 있는 것이 있습니다<span class="tag t-key">고급</span></li>
+          <li>계정 하나로는 절대 3천 못 만든다 — 구조 설계의 비밀</li>
+        </ul>
+        <div class="wk-teaser">💬 이번 주 이후, 매출을 보는 눈이 완전히 달라집니다.</div>
+      </div>
+
+      <div class="wk-card">
+        <div class="wk-date">Week 8 · 6월 27일 (토)</div>
+        <div class="wk-title">
+          마스터가 8주 동안<br>
+          <span class="hl">보여주지 않은 것</span> —<br>
+          마지막 주에 전부 꺼냅니다
+        </div>
+        <ul class="tlist">
+          <li>강의에서 단 한 번도 말 안 한 수익 구조 — 오늘 처음 공개<span class="tag t-key">최초공개</span></li>
+          <li>일반 셀러와 월 3천 셀러의 결정적 차이 — 딱 하나입니다<span class="tag t-hot">독점</span></li>
+          <li>8주 총정리 — 지금 당장 실행해야 할 액션 리스트</li>
+          <li>3천 이후의 세계 — 다음 목표를 어디에 두어야 하는가<span class="tag t-new">코칭</span></li>
+        </ul>
+        <div class="wk-teaser">💬 8주 후, 이 커리큘럼이 왜 12개월 결제자에게만 공개됐는지 알게 됩니다.</div>
+      </div>
+
+    </div>
+    <div class="ph-goal"><span>🏆</span><div><strong>Phase 4 목표:</strong> 월 매출 3천 달성 구조 완성 + 자동화 운영 시스템 구축</div></div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- ─── BOTTOM CTA ─── -->
+  <div class="cta">
+    <h2>이 강의,<br><em>4월에 12개월 결제한 분</em>만<br>들을 수 있습니다</h2>
+    <p>
+      커리큘럼을 보셨다면 아실 겁니다.<br>
+      <strong>이 내용은 어디서도 공개된 적이 없습니다.</strong><br>
+      마스터가 직접 써먹는 소싱 루트, 설계도, AI 프롬프트 — 전부 8주 안에 드립니다.<br><br>
+      5월에 12개월 결제하시면, <strong>다음 기수부터 동일한 혜택</strong>이 제공됩니다.
+    </p>
+    <div class="cta-chips">
+      <div class="cta-chip">📅 5월 9일 개강</div>
+      <div class="cta-chip">🗓 매주 토요일 9시</div>
+      <div class="cta-chip">📹 녹화본 제공</div>
+      <div class="cta-chip">🔒 12개월 결제자 전용</div>
+    </div>
+    <div class="cta-box">
+      ⚠️ 이 커리큘럼은 <strong>일반 공개 강의가 아닙니다.</strong><br>
+      궁금하신 분은 5월 중 12개월 결제 후 다음 기수에서 만나요.
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <em>쿠대</em> · 하이브리드 전략 8주 라이브 가이드 · 12개월 결제자 전용 · 매주 토요일 09:00~11:00 · 2026
+</div>
+
+</body>
+</html>
